@@ -1,6 +1,18 @@
-import Head from 'next/head'
+import Head from 'next/head';
+import Link from 'next/link';
+import Image from 'next/image'
+import utilStyles from "../styles/utils.module.css"
+import { getSortedPostsData } from '../lib/posts'
 
-export default function Home() {
+export async function getStaticProps() {
+  const allPostsData = getSortedPostsData()
+  return {
+    props: {
+      allPostsData
+    }
+  }
+}
+export default function Home({allPostsData}) {
   return (
     <div className="container">
       <Head>
@@ -10,52 +22,49 @@ export default function Home() {
 
       <main>
         <h1 className="title">
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
+          Eremes Kim<br/>
+          <span>this is</span><Link href="/posts/first-post">
+          <a > first-blog </a>
+          </Link>
+          <span>using next.js!</span>
         </h1>
-
+        <Image
+          src="/images/profile2.jpg" // Route of the image file
+          height={122} // Desired size with correct aspect ratio
+          width={122} // Desired size with correct aspect ratio
+          alt="Your Name"
+        />
         <p className="description">
-          Get started by editing <code>pages/index.js</code>
+          exciting <code>next.js</code> :)
         </p>
+        
+        <Link href="/posts/second-post"><a style={{color:"#914f14",fontWeight:"bold"}}>Introduce MYSELF</a></Link>
 
-        <div className="grid">
-          <a href="https://nextjs.org/docs" className="card">
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
 
-          <a href="https://nextjs.org/learn" className="card">
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className="card"
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className="card"
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
+        <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
+        <h2 className={utilStyles.headingLg}>Blog</h2>
+        <ul className={utilStyles.list}>
+          {allPostsData.map(({ id, date, title }) => (
+            <li className={utilStyles.listItem} key={id}>
+              {title}
+              <br />
+              {id}
+              <br />
+              {date}
+            </li>
+          ))}
+        </ul>
+      </section>
+  
       </main>
-
+    
       <footer>
         <a
           href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
           target="_blank"
           rel="noopener noreferrer"
         >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel" className="logo" />
+          Powered by <img src="/vercel.svg" alt="Vercel" className="logo" />
         </a>
       </footer>
 
@@ -101,7 +110,9 @@ export default function Home() {
           color: inherit;
           text-decoration: none;
         }
-
+        h1 span{
+          font-size: 34px;
+        }
         .title a {
           color: #0070f3;
           text-decoration: none;
@@ -205,5 +216,5 @@ export default function Home() {
         }
       `}</style>
     </div>
-  )
+  );
 }
